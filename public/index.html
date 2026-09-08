@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Session Transcript</title>
+	<link rel="stylesheet" href="/index.css" />
+	<link rel="icon" type="image/x-icon" href="/assets/D20.png">
+</head>
+<body>
+
+	<div class="page">
+		<div class="top">
+			<h1>Session Transcript</h1>
+			<div class="status">
+				<span class="status-dot" id="statusDot"></span>
+				<span id="statusText">Connecting…</span>
+			</div>
+		</div>
+
+		<div class="log" id="log">
+			<div class="empty-state" id="emptyState">Nothing transcribed yet. Start talking in voice chat.</div>
+		</div>
+	</div>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		const log = document.getElementById('log');
+		const emptyState = document.getElementById('emptyState');
+		const statusDot = document.getElementById('statusDot');
+		const statusText = document.getElementById('statusText');
+
+		// Gives each speaker a consistent color based on their name,
+		// so the same character always reads the same color all session.
+		const SPEAKER_COLORS = ['#4fd1c5', '#f2b880', '#c792ea', '#82aaff', '#f07178', '#a3e07f'];
+		function colorForSpeaker(name) {
+			let hash = 0;
+			for (let i = 0; i < name.length; i++) {
+				hash = name.charCodeAt(i) + ((hash << 5) - hash);
+			}
+			return SPEAKER_COLORS[Math.abs(hash) % SPEAKER_COLORS.length];
+		}
+
+		function appendLine(entry) {
+			if (emptyState) emptyState.remove();
+
+			const time = new Date(entry.timestamp).toLocaleTimeString([], {
+				hour: '2-digit',
+				minute: '2-digit',
+				second: '2-digit',
+			});
+
+			const div = document.createElement('div');
+			div.className = 'line';
+			div.innerHTML = `
+				<span class="time">${time}</span>
+				<span class="speaker" style="color:${colorForSpeaker(entry.speaker)}">${entry.speaker}</span>
+				<span class="text">${entry.text}</span>
+			`;
+
+			log.appendChild(div);
+			log.scrollTop = log.scrollHeight; // scrolls within the box only
+		}
+
+		// Load existing history once, when the page first opens
+		fetch('/api/transcript')
+			.then((res) => res.json())
+			.then((entries) => entries.forEach(appendLine))
+			.catch(() => {
+				statusText.textContent = 'Could not load history';
+			});
+
+		// Then listen for new lines pushed live from the server
+		const socket = io();
+
+		socket.on('connect', () => {
+			statusDot.classList.add('live');
+			statusText.textContent = 'Live';
+		});
+
+		socket.on('disconnect', () => {
+			statusDot.classList.remove('live');
+			statusText.textContent = 'Disconnected';
+		});
+
+		socket.on('newEntry', appendLine);
+	</script>
+</body>
+</html>

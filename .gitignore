@@ -1,0 +1,6 @@
+config.json
+whisper_models
+venv
+node_modules
+characters.json
+eslint.config.js
