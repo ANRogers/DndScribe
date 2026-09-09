@@ -1,6 +1,6 @@
-const { askChatGPT } = require('../openaiClient');
+const { askChatGPT } = require('./openaiClient');
 const { obsidianPath } = require('../config.json');
-const { syncObsidianEntities } = require('../obsidianSync');
+const { syncObsidianEntities } = require('./obsidianSync');
 
 const fs = require('node:fs');
 const path = require('node:path');

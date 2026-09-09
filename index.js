@@ -45,7 +45,7 @@ startWebServer();
 
 // Start the persistent Whisper transcription server as a background process.
 // This loads the model once, instead of reloading it on every single clip.
-const pythonServer = spawn(pythonPath, [path.join(__dirname, 'transcribe.py')]);
+const pythonServer = spawn(pythonPath, [path.join(__dirname, '/transcribe/transcribe.py')]);
 
 pythonServer.stdout.on('data', (data) => {
 	console.log(`[whisper-server] ${data.toString().trim()}`);

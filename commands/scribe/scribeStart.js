@@ -1,8 +1,8 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { joinVoiceChannel } = require('@discordjs/voice');
 const { startSession, addEntry } = require('../../sessionManager');
-const { setupVoiceCapture } = require('../../voiceCapture');
-const { transcribeAudio } = require('../../transcriber');
+const { setupVoiceCapture } = require('../../transcribe/voiceCapture');
+const { transcribeAudio } = require('../../transcribe/transcriber');
 const fs = require('node:fs');
 const { getCharacter } = require('../../characterStore');
 const { ownerId } = require('../../config.json');

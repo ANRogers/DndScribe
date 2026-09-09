@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
-const { summeriseAi } = require('../../AI_Summerise');
+const { summeriseAi } = require('../../summarise/AI_Summerise');
 
 
 module.exports = {
