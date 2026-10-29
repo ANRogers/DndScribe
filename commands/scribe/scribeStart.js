@@ -4,7 +4,7 @@ const { startSession, addEntry } = require('../../sessionManager');
 const { setupVoiceCapture } = require('../../transcribe/voiceCapture');
 const { transcribeAudio } = require('../../transcribe/transcriber');
 const fs = require('node:fs');
-const { getCharacter } = require('../../characterStore');
+const { getCharacter, getCharacterColour } = require('../../characterStore');
 const { ownerId } = require('../../config.json');
 const path = require('node:path');
 
@@ -17,9 +17,6 @@ module.exports = {
 			option.setName('session').setDescription('Session number (optional)').setRequired(false),
 		),
 	async execute(interaction) {
-		if (interaction.user.id != ownerId) {
-			return interaction.reply({ content: 'You Do Not Have Permission To Use This Command!', ephemeral: true });
-		}
 		const voiceChannel = interaction.member.voice.channel;
 		if (!voiceChannel) {
 			return interaction.reply({
@@ -28,6 +25,7 @@ module.exports = {
 			});
 		}
 
+		// eslint-disable-next-line no-inline-comments
 		const sessionNumber = interaction.options.getInteger('session'); // null if not provided
 		const sessionsPath = path.join(global.projectRoot, `sessions ${sessionNumber}.txt`);
 
@@ -45,7 +43,7 @@ module.exports = {
 
 		startSession(interaction.guildId, connection, sessionNumber);
 
-		setupVoiceCapture(connection, async (userId, wavPath) => {
+		setupVoiceCapture(connection, interaction.guildId, async (userId, wavPath) => {
 			const date = new Date();
 			const text = await transcribeAudio(wavPath);
 			fs.unlink(wavPath, () => {});
@@ -64,7 +62,14 @@ module.exports = {
 				}
 			}
 
-			addEntry(interaction.guildId, displayName, text, date);
+			const colour = getCharacterColour(userId);
+			let displayColour = colour;
+
+			if (!displayColour) {
+				displayColour = null;
+			}
+
+			addEntry(interaction.guildId, displayName, text, date, displayColour);
 			console.log(`[${displayName}] ${text}`);
 		});
 

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 const { summeriseAi } = require('../../summarise/AI_Summerise');
@@ -6,7 +6,7 @@ const { summeriseAi } = require('../../summarise/AI_Summerise');
 
 module.exports = {
     cooldown: 5,
-	data: new SlashCommandBuilder().setName('summarize').setDescription('Summarize session notes and send them to obsidian!')
+	data: new SlashCommandBuilder().setName('summarize').setDescription('Summarize session notes and send them to chat!')
     .addStringOption((option) => option.setName('session-file').setDescription('Enter Session File.').setRequired(true)),
 	async execute(interaction) {
 		const sessionFile = interaction.options.getString('session-file', true).toLowerCase();
@@ -19,8 +19,13 @@ module.exports = {
         await interaction.deferReply();
         try {
             const prompt = fs.readFileSync(sessionsFileFull, 'utf8');
-            const resultMessage = await summeriseAi(prompt, sessionFile);
-            await interaction.editReply(resultMessage);
+            const filepath = await summeriseAi(prompt, sessionFile);
+
+            const transcriptFile = new AttachmentBuilder(filepath);
+            
+            await interaction.editReply({ content: `Transcript summarised. Summary saved to \`${filepath}\`. Summary file: `,
+			files: [transcriptFile],
+		});
             // if (summeriseAi(prompt, sessionFile)) {
             //     return interaction.editReply(`File \`${sessionFile}\` was summerised!`);
             // }

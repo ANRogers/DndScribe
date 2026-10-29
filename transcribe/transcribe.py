@@ -22,6 +22,7 @@ class Handler(BaseHTTPRequestHandler):
         body = json.loads(self.rfile.read(length))
         wav_path = body.get("path")
         character_names = body.get("names", [])  # <-- passed in from Node
+        obsidianPathNames = body.get("obFileNamesArry", [])
 
         prompt = "Dungeons and Dragons session."
         if character_names:

@@ -7,7 +7,7 @@ module.exports = {
 		.setName('set-character')
 		.setDescription('Assigns entered character to user')
 		.addStringOption((option) =>
-			option.setName('character').setDescription('Enter your character name').setRequired(true)
+			option.setName('character').setDescription('Enter your character name').setRequired(true),
 		),
 	async execute(interaction) {
 		const charName = interaction.options.getString('character', true);

@@ -29,19 +29,15 @@
 		const statusDot = document.getElementById('statusDot');
 		const statusText = document.getElementById('statusText');
 
-		// Gives each speaker a consistent color based on their name,
-		// so the same character always reads the same color all session.
-		const SPEAKER_COLORS = ['#4fd1c5', '#f2b880', '#c792ea', '#82aaff', '#f07178', '#a3e07f'];
-		function colorForSpeaker(name) {
-			let hash = 0;
-			for (let i = 0; i < name.length; i++) {
-				hash = name.charCodeAt(i) + ((hash << 5) - hash);
-			}
-			return SPEAKER_COLORS[Math.abs(hash) % SPEAKER_COLORS.length];
-		}
+		
 
 		function appendLine(entry) {
 			if (emptyState) emptyState.remove();
+
+			// Check BEFORE adding the new line, whether the user is already near the bottom.
+			// A small threshold (e.g. 40px) accounts for the new line's own height,
+			// so it still counts as "at the bottom" right before it's added.
+			const wasNearBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 40;
 
 			const time = new Date(entry.timestamp).toLocaleTimeString([], {
 				hour: '2-digit',
@@ -53,12 +49,16 @@
 			div.className = 'line';
 			div.innerHTML = `
 				<span class="time">${time}</span>
-				<span class="speaker" style="color:${colorForSpeaker(entry.speaker)}">${entry.speaker}</span>
+				<span class="speaker" style="color:${entry.colour}">${entry.speaker}</span>
 				<span class="text">${entry.text}</span>
 			`;
 
 			log.appendChild(div);
-			log.scrollTop = log.scrollHeight; // scrolls within the box only
+
+			// Only auto-scroll if they were already at (or near) the bottom.
+			if (wasNearBottom) {
+				log.scrollTop = log.scrollHeight;
+			}
 		}
 
 		// Load existing history once, when the page first opens

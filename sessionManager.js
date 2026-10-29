@@ -17,18 +17,18 @@ function startSession(guildId, connection, sessionNumber = null) {
 	const filePath = path.join(SESSIONS_DIR, fileName);
 	fs.writeFileSync(filePath, '');
 
-	sessions.set(guildId, { connection, entries: [], filePath });
+	sessions.set(guildId, { connection, entries: [], filePath, paused: false });
 }
 
 function getSession(guildId) {
 	return sessions.get(guildId);
 }
 
-function addEntry(guildId, speaker, text, date) {
+function addEntry(guildId, speaker, text, date, colour) {
 	const session = sessions.get(guildId);
 	if (!session) return;
 
-	const entry = { timestamp: date, speaker, text };
+	const entry = { timestamp: date, speaker, text, colour };
 	const line = `[${entry.timestamp.toLocaleTimeString()}] ${speaker}: ${text}\n`;
 
 	session.entries.push(entry);
@@ -46,6 +46,20 @@ function getEntries(guildId) {
 	return session ? session.entries : [];
 }
 
+function pauseSession(guildId) {
+	const session = sessions.get(guildId);
+	if (session) session.paused = true;
+}
+
+function resumeSession(guildId) {
+	const session = sessions.get(guildId);
+	if (session) session.paused = false;
+}
+
+function isPaused(guildId) {
+	const session = sessions.get(guildId);
+	return session ? session.paused : false;
+}
 
 
-module.exports = { startSession, getSession, addEntry, endSession, getEntries, sessionEvents };
+module.exports = { startSession, getSession, addEntry, endSession, getEntries, sessionEvents, pauseSession, resumeSession, isPaused };

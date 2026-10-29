@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, AttachmentBuilder } = require('discord.js');
 const { getVoiceConnection } = require('@discordjs/voice');
 const { getSession, endSession } = require('../../sessionManager');
 const { ownerId } = require('../../config.json');
@@ -9,9 +9,6 @@ module.exports = {
 		.setName('scribe-end')
 		.setDescription('DND scribe will leave your chat and stop scribeing'),
 	async execute(interaction) {
-		if (interaction.user.id != ownerId) {
-			return interaction.reply({ content: 'You Do Not Have Permission To Use This Command!', ephemeral: true });
-		}
 		const connection = getVoiceConnection(interaction.guildId);
 
 		if (!connection) {
@@ -27,6 +24,11 @@ module.exports = {
 			return interaction.reply('Left the voice channel.');
 		}
 
-		await interaction.reply(`Left the voice channel. Transcript saved to \`${session.filePath}\`.`);
+		const transcriptFile = new AttachmentBuilder(session.filePath);
+
+		await interaction.reply(
+			{ content: `Left the voice channel. Transcript saved to \`${session.filePath}\`. Session file: `,
+			files: [transcriptFile],
+		});
 	},
 };

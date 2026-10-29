@@ -3,15 +3,17 @@ const path = require('node:path');
 const prism = require('prism-media');
 const wav = require('wav');
 const { EndBehaviorType } = require('@discordjs/voice');
+const { isPaused } = require('../sessionManager');
 
 const TMP_DIR = path.join(__dirname, 'tmp_audio');
 if (!fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR);
 
-function setupVoiceCapture(connection, onClipReady) {
+function setupVoiceCapture(connection, guildId, onClipReady) {
 	const receiver = connection.receiver;
 	const active = new Set();
 
 	receiver.speaking.on('start', (userId) => {
+		if (isPaused(guildId)) return;
 		if (active.has(userId)) return;
 		active.add(userId);
 
