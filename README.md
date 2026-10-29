@@ -82,9 +82,12 @@ On first run, `faster-whisper` will download its model — this can take a few m
 | Command | Description |
 |---|---|
 | `/scribe-start [session]` | Joins your voice channel and begins transcribing (owner-only). Optional session number labels the saved transcript. |
-| `/scribe-end` | Leaves the voice channel and finalizes the session transcript. |
+| `/scribe-pause` | Pauses transcription while keeping the session active. |
+| `/scribe-resume` | Resumes transcription after it has been paused. |
+| `/scribe-end` | Leaves the voice channel and sends the raw session transcript. |
 | `/set-character <name>` | Assigns your Discord account to a character name for transcript labeling. |
-| `/summarise <filename>` | Sends a saved transcript to GPT, saves a Markdown summary, and generates new Obsidian notes for any newly mentioned characters, locations, or items. |
+| `/summarise <filename>` | Sends a saved transcript to GPT, generates a Markdown summary of the session and sends it back in response. |
+| `/summarise-obsidian <filename>` | Generates a session summary and saves it to a configured Obsidian vault, and creates new Obsidian notes for newly mentioned characters, locations, and items. Currently configured for the developer's personal vault. |
 | `/reload <command>` | Hot-reloads a command file without restarting the bot. |
 
 ## Live transcript viewer
