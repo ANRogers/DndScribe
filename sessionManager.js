@@ -61,5 +61,9 @@ function isPaused(guildId) {
 	return session ? session.paused : false;
 }
 
+function getActiveGuildIds() {
+    return [...sessions.keys()];
+}
 
-module.exports = { startSession, getSession, addEntry, endSession, getEntries, sessionEvents, pauseSession, resumeSession, isPaused };
+
+module.exports = { startSession, getSession, addEntry, endSession, getEntries, sessionEvents, pauseSession, resumeSession, isPaused, getActiveGuildIds };

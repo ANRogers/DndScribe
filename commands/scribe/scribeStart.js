@@ -5,7 +5,7 @@ const { setupVoiceCapture } = require('../../transcribe/voiceCapture');
 const { transcribeAudio } = require('../../transcribe/transcriber');
 const fs = require('node:fs');
 const { getCharacter, getCharacterColour } = require('../../characterStore');
-const { ownerId } = require('../../config.json');
+
 const path = require('node:path');
 
 module.exports = {

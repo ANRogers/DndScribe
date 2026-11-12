@@ -85,7 +85,7 @@ module.exports = {
                 {
                     name: 'Need Help?',
                     value:
-                        'Run `/sribe-help` at any time to view this guide again.\n' +
+                        'Run `/scribe-help` at any time to view this guide again.\n' +
                         'If a command is missing or fails, check your permissions and make sure you are ' +
                         'providing any required inputs.'
                 }

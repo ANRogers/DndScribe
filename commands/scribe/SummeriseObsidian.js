@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 const { summeriseAiObsidian } = require('../../summarise/AI_Summerise');
+const { ownerId } = require('../../config.json');
 
 
 module.exports = {

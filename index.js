@@ -41,7 +41,8 @@ for (const file of eventFiles) {
 	}
 }
 
-startWebServer();
+//startWebServer();
+startWebServer(client);
 
 // Start the persistent Whisper transcription server as a background process.
 // This loads the model once, instead of reloading it on every single clip.
