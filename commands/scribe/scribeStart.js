@@ -50,7 +50,7 @@ module.exports = {
 
 			if (!text) return;
 
-			const character = getCharacter(userId);
+			const character = getCharacter(userId, interaction.guildId);
 			let displayName = character;
 
 			if (!displayName) {
@@ -62,11 +62,11 @@ module.exports = {
 				}
 			}
 
-			const colour = getCharacterColour(userId);
+			const colour = getCharacterColour(userId, interaction.guildId);
 			let displayColour = colour;
 
 			if (!displayColour) {
-				displayColour = null;
+				displayColour = '#ff0000';
 			}
 
 			addEntry(interaction.guildId, displayName, text, date, displayColour, userId);

@@ -12,9 +12,9 @@ function saveStore(store) {
 	fs.writeFileSync(STORE_PATH, JSON.stringify(store, null, 2));
 }
 
-function setCharacter(userId, characterName) {
+function setCharacter(userId, guildId, characterName) {
 	const store = loadStore();
-	const charInfo = store[userId];
+	const charInfo = store[userId + guildId];
 
 	let charColour;
 	// check if a colour has been already assined if not set a default
@@ -25,13 +25,13 @@ function setCharacter(userId, characterName) {
 		const colours = ['#4fd1c5', '#f2b880', '#c792ea', '#82aaff', '#f07178', '#a3e07f'];
 		charColour = colours[Math.floor(Math.random() * colours.length)];
 	}
-	store[userId] = [characterName, charColour];
+	store[userId + guildId] = [characterName, charColour];
 	saveStore(store);
 }
 
-function setColour(userId, charName, colourName) {
+function setColour(userId, guildId, charName, colourName) {
 	const store = loadStore();
-	const charInfo = store[userId];
+	const charInfo = store[userId + guildId];
 	
 	let characterName;
 	// check if a name has been already assined if not set a username
@@ -41,19 +41,19 @@ function setColour(userId, charName, colourName) {
 	else {
 		characterName = charName;
 	}
-	store[userId] = [characterName, colourName];
+	store[userId + guildId] = [characterName, colourName];
 	saveStore(store);
 }
 
-function getCharacter(userId) {
+function getCharacter(userId, guildId) {
 	const store = loadStore();
-	const entry = store[userId];
+	const entry = store[userId + guildId];
 	return entry ? entry[0] : null;
 }
 
-function getCharacterColour(userId) {
+function getCharacterColour(userId, guildId) {
 	const store = loadStore();
-	const charInfo = store[userId];
+	const charInfo = store[userId + guildId];
 	return charInfo ? charInfo[1] : null;
 }
 

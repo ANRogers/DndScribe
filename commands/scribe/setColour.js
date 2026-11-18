@@ -15,7 +15,7 @@ module.exports = {
             return interaction.reply({ content: '**Error**: Not valid colour hexcode!', ephemeral: true });
         }
         const user = interaction.user.username;
-		setColour(interaction.user.id, user, charColour);
+		setColour(interaction.user.id, interaction.guild.id, user, charColour);
 		await interaction.reply(`**${charColour}** assigned to ${user}!`);
 	},
 };

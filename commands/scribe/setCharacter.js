@@ -11,7 +11,7 @@ module.exports = {
 		),
 	async execute(interaction) {
 		const charName = interaction.options.getString('character', true);
-		setCharacter(interaction.user.id, charName);
+		setCharacter(interaction.user.id, interaction.guild.id, charName);
 		await interaction.reply(`**${charName}** assigned to ${interaction.user.username}!`);
 	},
 };
