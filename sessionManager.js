@@ -24,11 +24,11 @@ function getSession(guildId) {
 	return sessions.get(guildId);
 }
 
-function addEntry(guildId, speaker, text, date, colour) {
+function addEntry(guildId, speaker, text, date, colour, userId) {
 	const session = sessions.get(guildId);
 	if (!session) return;
 
-	const entry = { timestamp: date, speaker, text, colour };
+	const entry = { timestamp: date, speaker, text, colour, userId };
 	const line = `[${entry.timestamp.toLocaleTimeString()}] ${speaker}: ${text}\n`;
 
 	session.entries.push(entry);

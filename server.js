@@ -21,6 +21,7 @@ let client;
 const allowedOrigins = [
     'https://mousedev.dev',
     'https://www.mousedev.dev',
+    'http://localhost:5173',
 ];
 
 // Configure CORS

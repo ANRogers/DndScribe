@@ -69,7 +69,7 @@ module.exports = {
 				displayColour = null;
 			}
 
-			addEntry(interaction.guildId, displayName, text, date, displayColour);
+			addEntry(interaction.guildId, displayName, text, date, displayColour, userId);
 			console.log(`[${displayName}] ${text}`);
 		});
 
